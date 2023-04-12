@@ -3,6 +3,8 @@ package pageobjects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -10,17 +12,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class ProductsPage {
-
-    By cartProductTitleBy = By.cssSelector("#B07XLML2YS > a:nth-child(2) > span > div");
-    By ProductTitleBy = By.cssSelector("#productTitle");
+    public final WebDriver driver;
 
     By quantityBy = By.cssSelector("#quantity");
-    By addToCartButtonBy = By.cssSelector("#add-to-cart-button");
-    By openCartButtonBy = By.cssSelector("#attach-sidesheet-view-cart-button");
-    public final WebDriver driver;
+
+    @FindBy(css = "#B07XLML2YS > a:nth-child(2) > span > div")
+    public WebElement cartProductTitle;
+    @FindBy(css = "#productTitle")
+    public WebElement productTitle;
+
+    @FindBy(css = "#add-to-cart-button")
+    public WebElement addToCartButton;
+    @FindBy(css = "#attach-sidesheet-view-cart-button")
+    public WebElement openCartButton;
+
 
     public ProductsPage(WebDriver driver) {
         this.driver = driver;
+        PageFactory.initElements(driver, this);
     }
 
     // get on retourne quelque chose.
@@ -32,21 +41,20 @@ public class ProductsPage {
     }
 
     public ProductsPage addToCart() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        driver.findElement(addToCartButtonBy).click();
+        addToCartButton.click();
         return this;
     }
 
-    public ProductsPage goToCardPage(){
+    public ProductsPage goToCardPage() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.elementToBeClickable(cartProductTitleBy)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(cartProductTitle)).click();
         return this;
     }
 
     public ProductsPage openCart() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.elementToBeClickable(openCartButtonBy)).click();
-        return new  ProductsPage(driver);
+        wait.until(ExpectedConditions.elementToBeClickable(openCartButton)).click();
+        return new ProductsPage(driver);
     }
 
     public ProductsPage getProductTitle() {
@@ -55,8 +63,8 @@ public class ProductsPage {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        driver.findElement(ProductTitleBy).getText();
-        return new  ProductsPage(driver);
+        productTitle.getText();
+        return new ProductsPage(driver);
     }
 
 }

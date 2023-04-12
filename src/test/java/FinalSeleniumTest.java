@@ -1,12 +1,14 @@
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pageobjects.CartPage;
-import pageobjects.ProductsPage;
 import pageobjects.HomePage;
-import pageobjects.SearchResultPage;
+
+import java.time.Duration;
+
 
 public class FinalSeleniumTest {
 
@@ -17,12 +19,13 @@ public class FinalSeleniumTest {
         driver = new ChromeDriver();
         driver.get("https://www.amazon.fr");
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(60));
     }
 
-//    @AfterMethod
-//    public void teardown() {
-//        driver.quit();
-//    }
+    @AfterMethod
+    public void teardown() {
+        driver.quit();
+    }
 
     @Test
     public void testAmazon() {
@@ -31,7 +34,6 @@ public class FinalSeleniumTest {
 
         HomePage homePage = new HomePage(driver);
         CartPage cartPage = new CartPage(driver);
-        ProductsPage productsPage = new ProductsPage(driver);
 
         String realTitle = homePage.closeCookiePopup()
                 .openNewPage()
