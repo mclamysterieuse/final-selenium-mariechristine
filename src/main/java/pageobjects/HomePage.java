@@ -1,31 +1,32 @@
 package pageobjects;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class HomePage {
 
-    By cookieAcceptButtonLocator = By.cssSelector("#sp-cc-accept");
+    @FindBy(id = "sp-cc-accept")
+    public WebElement cookieAcceptButtonLocator;
 
-    By bestSellerLocator = By.cssSelector("#nav-xshop > a:nth-child(3)");
-
+    @FindBy(css = "#nav-xshop > a:nth-child(3)")
+    public WebElement bestSellerLocator;
 
     WebDriver driver;
+
     public HomePage(WebDriver driver) {
         this.driver = driver;
+        PageFactory.initElements(driver, this);
     }
-
 
     public HomePage closeCookiePopup() {
-        driver.findElement(cookieAcceptButtonLocator).click();
+        cookieAcceptButtonLocator.click();
         return this;
     }
-    public SearchResultPage openNewPage(){
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        driver.findElement(bestSellerLocator).click();
+
+    public SearchResultPage openNewPage() {
+        bestSellerLocator.click();
         return new SearchResultPage(driver);
     }
 
